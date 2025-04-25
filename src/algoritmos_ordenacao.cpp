@@ -44,9 +44,61 @@ void selectionSort(std::vector<int>& arr) {
     }
 }
 
+// Função auxiliar para Quick Sort
+int particionar(std::vector<int>& arr, int low, int high) {
+    int pivot = arr[high];  // Pivô
+    int i = (low - 1);      // Índice do menor elemento
+    
+    for (int j = low; j <= high - 1; j++) {
+        // Se o elemento atual for menor que o pivô
+        if (arr[j] < pivot) {
+            i++;    // Incrementa o índice do menor elemento
+            std::swap(arr[i], arr[j]);
+        }
+    }
+    std::swap(arr[i + 1], arr[high]);
+    return (i + 1);
+}
+
+// Implementação Quick Sort
+void quickSort(std::vector<int>& arr, int low, int high) {
+    if (low < high) {
+        // pi é o índice de particionamento
+        int pi = particionar(arr, low, high);
+        
+        // Ordena elementos separadamente antes e depois da partição
+        quickSort(arr, low, pi - 1);
+        quickSort(arr, pi + 1, high);
+    }
+}
+
+// Invólucros para algoritmos recursivos
+void quickSortWrapper(std::vector<int>& arr) {
+    quickSort(arr, 0, arr.size() - 1);
+}
+
 // Obter nomes de todos os algoritmos disponíveis
 std::vector<std::string> obterNomesAlgoritmos() {
     return {
-        "insertion", "selection" //, "quick"
+        "insertion", "selection", "quick"
     };
 }
+
+// Mapear nome do algoritmo para função
+AlgoritmoOrdenacao obterAlgoritmo(const std::string& nome) {
+    static const std::unordered_map<std::string, AlgoritmoOrdenacao> algoritmos = {
+        {"insertion", insertionSort},
+        {"selection", selectionSort},
+        {"quick", quickSortWrapper}
+    };
+    
+    auto it = algoritmos.find(nome);
+    if (it != algoritmos.end()) {
+        return it->second;
+    }
+    
+    // Algoritmo padrão se não encontrado
+    return quickSortWrapper;
+}
+
+} // namespace ordenacao
