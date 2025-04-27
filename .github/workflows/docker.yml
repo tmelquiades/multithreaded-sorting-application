@@ -1,0 +1,43 @@
+name: CI/CD Docker
+
+on:
+  push:
+    branches:
+      - main   # ou 'master', dependendo do seu repo
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout código
+      uses: actions/checkout@v4
+
+    - name: Login no Docker Hub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKER_HUB_USERNAME }}
+        password: ${{ secrets.DOCKER_HUB_TOKEN }}
+
+    - name: Build da imagem
+      run: docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/ordenacao-paralela:latest .
+
+    - name: Push da imagem para Docker Hub
+      run: docker push ${{ secrets.DOCKER_HUB_USERNAME }}/ordenacao-paralela:latest
+
+  update-server:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Conectar e atualizar no servidor remoto
+      uses: appleboy/ssh-action@v0.1.8
+      with:
+        host: ${{ secrets.SERVER_HOST }}
+        username: ${{ secrets.SERVER_USER }}
+        key: ${{ secrets.SERVER_SSH_PRIVATE_KEY }}
+        script: |
+          docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/ordenacao-paralela:latest
+          docker stop ordenacao-paralela || true
+          docker rm ordenacao-paralela || true
+          docker run -d --name ordenacao-paralela -p 8080:8080 ${{ secrets.DOCKER_HUB_USERNAME }}/ordenacao-paralela:latest
