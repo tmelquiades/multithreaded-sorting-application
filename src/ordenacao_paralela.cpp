@@ -177,7 +177,8 @@ void chamarQuickSortParalelo(std::vector<int>& arr, ordenacao::AlgoritmoOrdenaca
 // Obter nomes de todas as estratégias disponíveis
 std::vector<std::string> obterNomesEstrategias() {
     return {
-        "dividir-trabalho"
+        "dividir-trabalho",
+
     };
 }
 

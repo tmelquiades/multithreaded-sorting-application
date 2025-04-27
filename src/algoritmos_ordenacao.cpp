@@ -121,6 +121,10 @@ void mergeSort(std::vector<int>& arr, int inicio, int fim) {
     }
 }
 
+void mergeSortWrapper(std::vector<int>& arr) {
+    mergeSort(arr, 0, arr.size() - 1);
+}
+
 // Função auxiliar para Quick Sort
 int particionar(std::vector<int>& arr, int low, int high) {
     int pivot = arr[high];  // Pivô
@@ -157,7 +161,7 @@ void quickSortWrapper(std::vector<int>& arr) {
 // Obter nomes de todos os algoritmos disponíveis
 std::vector<std::string> obterNomesAlgoritmos() {
     return {
-        "insertion", "selection", "quick"
+        "insertion", "selection", "quick", "merge", "bubble"
     };
 }
 
@@ -166,7 +170,9 @@ AlgoritmoOrdenacao obterAlgoritmo(const std::string& nome) {
     static const std::unordered_map<std::string, AlgoritmoOrdenacao> algoritmos = {
         {"insertion", insertionSort},
         {"selection", selectionSort},
-        {"quick", quickSortWrapper}
+        {"quick", quickSortWrapper},
+        {"merge", mergeSortWrapper},
+        {"bubble", bubbleSort}
     };
     
     auto it = algoritmos.find(nome);
