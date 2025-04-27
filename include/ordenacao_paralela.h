@@ -11,6 +11,8 @@ namespace ordenacao_paralela {
 
 // Estratégias de paralelização
 void dividirTrabalho(std::vector<int>& arr, ordenacao::AlgoritmoOrdenacao algoritmo, int numThreads);
+void paralelizarMergeSort(std::vector<int>& arr, int numThreads);
+void paralelizarQuickSort(std::vector<int>& arr, int numThreads);
 
 // Tipos para estratégias de paralelização
 typedef std::function<void(std::vector<int>&, ordenacao::AlgoritmoOrdenacao, int)> EstrategiaParalela;

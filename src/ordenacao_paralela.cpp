@@ -64,6 +64,116 @@ void dividirTrabalho(std::vector<int>& arr, ordenacao::AlgoritmoOrdenacao algori
     arr = std::move(resultado);
 }
 
+// Implementação paralela do QuickSort
+int particionarParalelo(std::vector<int>& arr, int low, int high) {
+    int pivot = arr[high];
+    int i = low - 1;
+    
+    for (int j = low; j <= high - 1; j++) {
+        if (arr[j] < pivot) {
+            i++;
+            std::swap(arr[i], arr[j]);
+        }
+    }
+    std::swap(arr[i + 1], arr[high]);
+    return (i + 1);
+}
+
+// Função auxiliar para QuickSort paralelo
+void quickSortParalelo(std::vector<int>& arr, int low, int high, int profundidade, int maxProfundidade) {
+    if (low < high) {
+        int pi = particionarParalelo(arr, low, high);
+        
+        // Se a profundidade atual for menor que a profundidade máxima, cria uma thread
+        if (profundidade < maxProfundidade) {
+            // Ordena a parte esquerda em uma thread
+            auto futureLeft = std::async(
+                std::launch::async,
+                quickSortParalelo,
+                std::ref(arr), low, pi - 1, profundidade + 1, maxProfundidade
+            );
+            // Ordena a parte direita na thread atual
+            quickSortParalelo(arr, pi + 1, high, profundidade + 1, maxProfundidade);
+            
+            futureLeft.wait();
+        } else {
+            // Se a profundidade máxima for atingida, ordena sequencialmente
+            quickSortParalelo(arr, low, pi - 1, profundidade + 1, maxProfundidade);
+            quickSortParalelo(arr, pi + 1, high, profundidade + 1, maxProfundidade);
+        }
+    }
+}
+
+void mergeParalelo(std::vector<int>& arr, int inicio, int meio, int fim) {
+    std::vector<int> esquerda(arr.begin() + inicio, arr.begin() + meio + 1);
+    std::vector<int> direita(arr.begin() + meio + 1, arr.begin() + fim + 1);
+    
+    int i = 0, j = 0, k = inicio;
+    // Mescla os dois vetores
+    while (i < esquerda.size() && j < direita.size()) {
+        if (esquerda[i] <= direita[j]) {
+            arr[k++] = esquerda[i++];
+        } else {
+            arr[k++] = direita[j++];
+        }
+    }
+    
+    // Copia os elementos restantes
+    while (i < esquerda.size()) {
+        arr[k++] = esquerda[i++];
+    }
+    
+    while (j < direita.size()) {
+        arr[k++] = direita[j++];
+    }
+}
+
+void mergeSortParalelo(std::vector<int>& arr, int inicio, int fim, int profundidade, int maxProfundidade) {
+    if (inicio < fim) {
+        int meio = inicio + (fim - inicio) / 2;
+        
+        // Se a profundidade atual for menor que a profundidade máxima, cria uma thread
+        if (profundidade < maxProfundidade) {
+            auto futureLeft = std::async(
+                std::launch::async,
+                mergeSortParalelo,
+                std::ref(arr), inicio, meio, profundidade + 1, maxProfundidade
+            );
+            mergeSortParalelo(arr, meio + 1, fim, profundidade + 1, maxProfundidade);
+            
+            futureLeft.wait();
+        } else {
+            // Se a profundidade máxima for atingida, ordena sequencialmente
+            mergeSortParalelo(arr, inicio, meio, profundidade + 1, maxProfundidade);
+            mergeSortParalelo(arr, meio + 1, fim, profundidade + 1, maxProfundidade);
+        }
+        
+        // Mescla os dois subarrays
+        mergeParalelo(arr, inicio, meio, fim);
+    }
+}
+// Função de interface para MergeSort paralelo
+void paralelizarMergeSort(std::vector<int>& arr, int numThreads) {
+    int maxProfundidade = static_cast<int>(std::log2(numThreads));
+    mergeSortParalelo(arr, 0, arr.size() - 1, 0, maxProfundidade);
+}
+
+void chamarMergeSortParalelo(std::vector<int>& arr, ordenacao::AlgoritmoOrdenacao, int numThreads) {
+    paralelizarMergeSort(arr, numThreads);
+}
+
+// Funcao de interface para QuickSort paralelo
+void paralelizarQuickSort(std::vector<int>& arr, int numThreads) {
+    int maxProfundidade = static_cast<int>(std::log2(numThreads));
+    quickSortParalelo(arr, 0, arr.size() - 1, 0, maxProfundidade);
+}
+
+// Função de interface para chamar o QuickSort paralelo
+void chamarQuickSortParalelo(std::vector<int>& arr, ordenacao::AlgoritmoOrdenacao, int numThreads) {
+    paralelizarQuickSort(arr, numThreads);
+}
+
+
 // Obter nomes de todas as estratégias disponíveis
 std::vector<std::string> obterNomesEstrategias() {
     return {
