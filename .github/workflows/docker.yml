@@ -24,20 +24,3 @@ jobs:
 
     - name: Push da imagem para Docker Hub
       run: docker push ${{ secrets.DOCKER_HUB_USERNAME }}/ordenacao-paralela:latest
-
-  update-server:
-    needs: build-and-push
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: Conectar e atualizar no servidor remoto
-      uses: appleboy/ssh-action@v0.1.8
-      with:
-        host: ${{ secrets.SERVER_HOST }}
-        username: ${{ secrets.SERVER_USER }}
-        key: ${{ secrets.SERVER_SSH_PRIVATE_KEY }}
-        script: |
-          docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/ordenacao-paralela:latest
-          docker stop ordenacao-paralela || true
-          docker rm ordenacao-paralela || true
-          docker run -d --name ordenacao-paralela -p 8080:8080 ${{ secrets.DOCKER_HUB_USERNAME }}/ordenacao-paralela:latest
