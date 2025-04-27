@@ -110,7 +110,7 @@ void mergeParalelo(std::vector<int>& arr, int inicio, int meio, int fim) {
     
     int i = 0, j = 0, k = inicio;
     // Mescla os dois vetores
-    while (i < esquerda.size() && j < direita.size()) {
+    while (i < static_cast<int>(esquerda.size()) && j < static_cast<int>(direita.size())) {
         if (esquerda[i] <= direita[j]) {
             arr[k++] = esquerda[i++];
         } else {
@@ -119,11 +119,11 @@ void mergeParalelo(std::vector<int>& arr, int inicio, int meio, int fim) {
     }
     
     // Copia os elementos restantes
-    while (i < esquerda.size()) {
+    while (i < static_cast<int>(esquerda.size())) {
         arr[k++] = esquerda[i++];
     }
     
-    while (j < direita.size()) {
+    while (j < static_cast<int>(direita.size())) {
         arr[k++] = direita[j++];
     }
 }
