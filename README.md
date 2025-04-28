@@ -96,7 +96,7 @@ A aplicação oferece uma interface de linha de comando completa com várias op�
 
 #### Opções Principais:
 - `-h, --help`: Mostra a ajuda
-- `-m, --modo <modo>`: Define o modo de operação (ordenar, gerar, benchmark)
+- `-m, --modo <modo>`: Define o modo de operação (ordenar, ordenar-paralelo, gerar, benchmark)
 - `-a, --algoritmo <algoritmo>`: Define o algoritmo de ordenação
 - `-e, --estrategia <estrategia>`: Define a estratégia de paralelização
 - `-i, --input <arquivo>`: Define o arquivo de entrada

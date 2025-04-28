@@ -19,7 +19,7 @@ void imprimirAjuda() { // a parte do help (-h)
     std::cout << "Aplicação de ordenação paralela em C++.\n\n";
     std::cout << "Opções:\n";
     std::cout << "  -h, --help                      Mostra esta ajuda\n";
-    std::cout << "  -m, --modo <modo>               Define o modo de operação (ordenar, gerar, benchmark)\n";
+    std::cout << "  -m, --modo <modo>               Define o modo de operação (ordenar, ordenar-paralelo, gerar, benchmark)\n";
     std::cout << "  -a, --algoritmo <algoritmo>     Define o algoritmo de ordenação a ser usado\n";
     std::cout << "  -e, --estrategia <estrategia>   Define a estratégia de paralelização\n";
     std::cout << "  -i, --input <arquivo>           Define o arquivo de entrada\n";
