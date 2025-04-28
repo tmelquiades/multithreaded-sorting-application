@@ -5,7 +5,7 @@
 #include <vector>
 #include <string>
 #include <functional>
-#include "algoritmos_ordenacao.h"
+#include "algoritmos_ordenacao/algoritmos_ordenacao.h"
 
 namespace ordenacao_paralela {
 

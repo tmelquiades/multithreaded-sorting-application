@@ -32,7 +32,16 @@ include_directories(
 # Arquivos fonte do projeto
 set(SOURCE_FILES
     src/main.cpp
-    src/algoritmos_ordenacao.cpp
+    src/algoritmos_ordenacao/algoritmos_ordenacao.cpp
+    src/algoritmos_ordenacao/insertion.cpp
+    src/algoritmos_ordenacao/selection.cpp
+    src/algoritmos_ordenacao/bubble.cpp
+    src/algoritmos_ordenacao/counting.cpp
+    src/algoritmos_ordenacao/radix.cpp
+    src/algoritmos_ordenacao/quick.cpp
+    src/algoritmos_ordenacao/merge.cpp
+    src/algoritmos_ordenacao/bubble.cpp
+    src/algoritmos_ordenacao/heap.cpp
     src/ordenacao_paralela.cpp
     src/gerador_dados.cpp
     src/benchmark.cpp

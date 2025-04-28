@@ -6,7 +6,7 @@
 #include <string>
 #include <chrono>
 #include <functional>
-#include "algoritmos_ordenacao.h"
+#include "algoritmos_ordenacao/algoritmos_ordenacao.h"
 #include "ordenacao_paralela.h"
 
 namespace benchmark {

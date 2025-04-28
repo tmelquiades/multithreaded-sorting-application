@@ -1,6 +1,6 @@
 // cli.cpp
 #include "cli.h"
-#include "algoritmos_ordenacao.h"
+#include "algoritmos_ordenacao/algoritmos_ordenacao.h"
 #include "ordenacao_paralela.h"
 #include "gerador_dados.h"
 #include "benchmark.h"
