@@ -49,7 +49,7 @@ Esta aplicação foi desenvolvida para demonstrar como algoritmos de ordenação
 
 1. Clone o repositório:
    ```bash
-   git clone [https://github.com/seu-usuario/ordenacao-paralela.git](https://github.com/tmelquiades/multithreaded-sorting-application.git)
+   git clone https://github.com/tmelquiades/multithreaded-sorting-application.git
    cd multithreaded-sorting-application
    ```
 
