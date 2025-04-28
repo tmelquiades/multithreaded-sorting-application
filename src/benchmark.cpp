@@ -120,13 +120,14 @@ std::vector<ResultadoBenchmark> executarBenchmarks(
             double tempoTotal = 0.0;
             bool todosCorretos = true;
             
+            // executar repetidas vezes
             for (int i = 0; i < repeticoes; i++) {
                 auto dadosCopia = dadosOriginais;
                 auto resultado = benchmarkAlgoritmoSequencial(algoritmo, dadosCopia); // executa todos algs sequencialmente
                 tempoTotal += resultado.tempo;
                 todosCorretos = todosCorretos && resultado.correto;
             }
-            
+            // calcular o tempo médio e verificar se todos os resultados estão corretos
             ResultadoBenchmark resultadoMedio;
             resultadoMedio.nome = algoritmo + " (n=" + std::to_string(tamanho) + ")";
             resultadoMedio.tempo = tempoTotal / repeticoes;
@@ -144,17 +145,17 @@ std::vector<ResultadoBenchmark> executarBenchmarks(
                     !(estrategia == "quick-paralelo" && algoritmo == "quick")) {
                     continue;  // pular combinações que não fazem sentido
                 }
-                
+                // executar benchmark para cada combinação de algoritmo e estratégia
                 double tempoTotal = 0.0;
                 bool todosCorretos = true;
-                
+                // executar repetidas vezes
                 for (int i = 0; i < repeticoes; i++) {
                     auto dadosCopia = dadosOriginais;
                     auto resultado = benchmarkAlgoritmoParalelo(algoritmo, estrategia, dadosCopia, numThreads);
                     tempoTotal += resultado.tempo;
                     todosCorretos = todosCorretos && resultado.correto;
                 }
-                
+                // calcular o tempo médio e verificar se todos os resultados estão corretos                
                 ResultadoBenchmark resultadoMedio;
                 std::ostringstream nomeCompleto;
                 nomeCompleto << algoritmo << " + " << estrategia << " (n=" << tamanho << ", " << numThreads << " threads)";
