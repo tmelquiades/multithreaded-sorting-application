@@ -35,6 +35,7 @@ set(SOURCE_FILES
     src/algoritmos_ordenacao.cpp
     src/ordenacao_paralela.cpp
     src/gerador_dados.cpp
+    src/benchmark.cpp
 )
 
 # Criar executável

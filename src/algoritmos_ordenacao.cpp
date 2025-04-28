@@ -286,14 +286,14 @@ void quickSortWrapper(std::vector<int>& arr) {
     quickSort(arr, 0, arr.size() - 1);
 }
 
-// Obter nomes de todos os algoritmos disponíveis
+// obter nomes de todos os algoritmos disponíveis
 std::vector<std::string> obterNomesAlgoritmos() {
     return {
-        "insertion", "selection", "quick", "merge", "bubble"
+        "insertion", "selection", "quick", "merge", "bubble", "heap", "counting", "radix"
     };
 }
 
-// Mapear nome do algoritmo para função
+// mapear nome do algoritmo para função
 AlgoritmoOrdenacao obterAlgoritmo(const std::string& nome) {
     static const std::unordered_map<std::string, AlgoritmoOrdenacao> algoritmos = {
         {"insertion", insertionSort},
@@ -311,7 +311,7 @@ AlgoritmoOrdenacao obterAlgoritmo(const std::string& nome) {
         return it->second;
     }
     
-    // Algoritmo padrão se não encontrado
+    // algoritmo padrão se não encontrado
     return quickSortWrapper;
 }
 
