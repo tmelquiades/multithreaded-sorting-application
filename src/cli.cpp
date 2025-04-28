@@ -189,7 +189,7 @@ Opcoes parseArgumentos(int argc, char* argv[]) {
         } else if (arg == "-t" || arg == "--tipo") {
             if (i + 1 < argc) opcoes.tipoDados = argv[++i];
         } else if (arg == "-p" || arg == "--threads") {
-            if (i + 1 < argc) opcoes.numThreads = std::stoi(argv[++i]);
+            if (i + 1 < argc) opcoes.numThreads = std::min(std::stoi(argv[++i]), opcoes.numThreads); // pega o min das threads do computador
         } else if (arg == "-v" || arg == "--visualizar") {
             opcoes.visualizar = true;
         } else if (arg == "-b" || arg == "--benchmark") {
