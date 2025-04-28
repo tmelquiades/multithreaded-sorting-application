@@ -300,7 +300,10 @@ AlgoritmoOrdenacao obterAlgoritmo(const std::string& nome) {
         {"selection", selectionSort},
         {"quick", quickSortWrapper},
         {"merge", mergeSortWrapper},
-        {"bubble", bubbleSort}
+        {"bubble", bubbleSort},
+        {"heap", heapSort},
+        {"counting", countingSort},
+        {"radix", radixSort}
     };
     
     auto it = algoritmos.find(nome);
