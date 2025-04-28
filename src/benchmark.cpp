@@ -1,5 +1,6 @@
 // benchmark.cpp
 #include "benchmark.h"
+#include "gerador_dados.h"
 #include <algorithm>
 #include <iostream>
 #include <random>
@@ -76,20 +77,6 @@ ResultadoBenchmark benchmarkAlgoritmoParalelo(
     return resultado;
 }
 
-// gerar dados aleatórios para teste
-std::vector<int> gerarDadosAleatorios(int tamanho, int min = 0, int max = 1000000) {
-    std::vector<int> arr(tamanho); // array do tamanho escolhido
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_int_distribution<> dist(min, max);
-    
-    for (int i = 0; i < tamanho; i++) {
-        arr[i] = dist(gen);
-    }
-    
-    return arr;
-}
-
 // executar benchmarks completos
 std::vector<ResultadoBenchmark> executarBenchmarks(
     const std::vector<std::string>& algoritmos,
@@ -105,8 +92,9 @@ std::vector<ResultadoBenchmark> executarBenchmarks(
     for (int tamanho : tamanhos) {
         // criar dados de entrada
         std::vector<int> dadosOriginais;
-        if (dadosAleatorios) {
-            dadosOriginais = gerarDadosAleatorios(tamanho);
+        if (dadosAleatorios) { // dados aleatorios por padrao
+            gerador::TipoDados tipo = gerador::obterTipoPorNome("aleatorio");
+            dadosOriginais = gerador::gerarDados(tamanho, tipo);
         } else {
             // criar array ordenado inversamente para caso pior
             dadosOriginais.resize(tamanho);

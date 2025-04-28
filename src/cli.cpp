@@ -158,7 +158,7 @@ Opcoes parseArgumentos(int argc, char* argv[]) {
     opcoes.estrategia = "dividir-trabalho";
     opcoes.tamanho = 10000;
     opcoes.tipoDados = "aleatorio";
-    opcoes.numThreads = std::thread::hardware_concurrency();
+    opcoes.numThreads = std::thread::hardware_concurrency(); // pega o maximo das threads do seu computador
     opcoes.visualizar = false;
     opcoes.benchmark = false;
     opcoes.repeticoes = 3;
