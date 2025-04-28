@@ -18,7 +18,7 @@ std::mutex mtx;
 void dividirTrabalho(std::vector<int>& arr, ordenacao::AlgoritmoOrdenacao algoritmo, int numThreads) {
     int tamanho = arr.size();
     int segmentoTamanho = tamanho / numThreads;
-    std::vector<std::thread> threads;
+    std::vector<std::thread> threads; // vetor de threads
     
     // Função para ordenar um segmento do array
     auto ordenarSegmento = [&](int inicio, int fim) {
@@ -31,23 +31,24 @@ void dividirTrabalho(std::vector<int>& arr, ordenacao::AlgoritmoOrdenacao algori
     };
     
     // Criar e iniciar threads
-    for (int i = 0; i < numThreads - 1; i++) {
+    for (int i = 0; i < numThreads - 1; i++) { // num de threads - 1 porque o ultimo segmento não sabemos o tamanho
         int inicio = i * segmentoTamanho;
         int fim = (i + 1) * segmentoTamanho;
-        threads.emplace_back(ordenarSegmento, inicio, fim);
+        threads.emplace_back(ordenarSegmento, inicio, fim); // cria uma nova thread dentro do vetor threads 
+                                                             // e a inicializa com a função lambda - ordenar segmento e seus parâmetros
     }
     
     // Último segmento (pode ser maior devido a divisão não exata)
     int inicio = (numThreads - 1) * segmentoTamanho;
     int fim = tamanho;
-    threads.emplace_back(ordenarSegmento, inicio, fim);
+    threads.emplace_back(ordenarSegmento, inicio, fim); // cria o ultimo segmento com a função lamba - ordenar segmento
     
-    // Aguardar todas as threads terminarem
+    // Faz a thread principal aguardar todas as threads terminarem
     for (auto& thread : threads) {
         thread.join();
     }
     
-    // Mesclar os segmentos ordenados com merge
+    // depois que todas threads acabaram: mesclar os segmentos ordenados com merge
     std::vector<int> resultado = arr;
     for (int passo = 1; passo < numThreads; passo *= 2) {
         for (int i = 0; i < numThreads; i += 2 * passo) {
@@ -56,7 +57,7 @@ void dividirTrabalho(std::vector<int>& arr, ordenacao::AlgoritmoOrdenacao algori
             int fim = std::min((i + 2 * passo) * segmentoTamanho, tamanho);
             
             if (meio < fim) {
-                std::inplace_merge(resultado.begin() + inicio, resultado.begin() + meio, resultado.begin() + fim);
+                std::inplace_merge(resultado.begin() + inicio, resultado.begin() + meio, resultado.begin() + fim); // 
             }
         }
     }
@@ -64,7 +65,11 @@ void dividirTrabalho(std::vector<int>& arr, ordenacao::AlgoritmoOrdenacao algori
     arr = std::move(resultado);
 }
 
-// Implementação paralela do QuickSort
+
+
+
+
+/* ==================== Implementação paralela do QuickSort ===============================*/
 int particionarParalelo(std::vector<int>& arr, int low, int high) {
     int pivot = arr[high];
     int i = low - 1;
@@ -104,6 +109,20 @@ void quickSortParalelo(std::vector<int>& arr, int low, int high, int profundidad
     }
 }
 
+// função de interface para QuickSort paralelo
+void paralelizarQuickSort(std::vector<int>& arr, int numThreads) {
+    int maxProfundidade = static_cast<int>(std::log2(numThreads));
+    quickSortParalelo(arr, 0, arr.size() - 1, 0, maxProfundidade);
+}
+
+// função de interface para chamar o QuickSort paralelo
+void chamarQuickSortParalelo(std::vector<int>& arr, ordenacao::AlgoritmoOrdenacao, int numThreads) {
+    paralelizarQuickSort(arr, numThreads);
+}
+
+
+
+/* ==================== Implementação paralela do MergeSort ===============================*/
 void mergeParalelo(std::vector<int>& arr, int inicio, int meio, int fim) {
     std::vector<int> esquerda(arr.begin() + inicio, arr.begin() + meio + 1);
     std::vector<int> direita(arr.begin() + meio + 1, arr.begin() + fim + 1);
@@ -160,17 +179,6 @@ void paralelizarMergeSort(std::vector<int>& arr, int numThreads) {
 
 void chamarMergeSortParalelo(std::vector<int>& arr, ordenacao::AlgoritmoOrdenacao, int numThreads) {
     paralelizarMergeSort(arr, numThreads);
-}
-
-// função de interface para QuickSort paralelo
-void paralelizarQuickSort(std::vector<int>& arr, int numThreads) {
-    int maxProfundidade = static_cast<int>(std::log2(numThreads));
-    quickSortParalelo(arr, 0, arr.size() - 1, 0, maxProfundidade);
-}
-
-// função de interface para chamar o QuickSort paralelo
-void chamarQuickSortParalelo(std::vector<int>& arr, ordenacao::AlgoritmoOrdenacao, int numThreads) {
-    paralelizarQuickSort(arr, numThreads);
 }
 
 

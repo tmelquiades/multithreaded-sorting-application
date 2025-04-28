@@ -78,7 +78,7 @@ ResultadoBenchmark benchmarkAlgoritmoParalelo(
 
 // gerar dados aleatórios para teste
 std::vector<int> gerarDadosAleatorios(int tamanho, int min = 0, int max = 1000000) {
-    std::vector<int> arr(tamanho);
+    std::vector<int> arr(tamanho); // array do tamanho escolhido
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_int_distribution<> dist(min, max);
@@ -143,7 +143,7 @@ std::vector<ResultadoBenchmark> executarBenchmarks(
                 if (ordenacao_paralela::ehEstrategiaEspecifica(estrategia) && 
                     !(estrategia == "merge-paralelo" && algoritmo == "merge") && 
                     !(estrategia == "quick-paralelo" && algoritmo == "quick")) {
-                    continue;  // pular combinações que não fazem sentido
+                    continue;  // pular combinações que não fazem sentido (só faço estratégia especifica com quem dá)
                 }
                 // executar benchmark para cada combinação de algoritmo e estratégia
                 double tempoTotal = 0.0;
@@ -151,19 +151,19 @@ std::vector<ResultadoBenchmark> executarBenchmarks(
                 // executar repetidas vezes
                 for (int i = 0; i < repeticoes; i++) {
                     auto dadosCopia = dadosOriginais;
-                    auto resultado = benchmarkAlgoritmoParalelo(algoritmo, estrategia, dadosCopia, numThreads);
+                    auto resultado = benchmarkAlgoritmoParalelo(algoritmo, estrategia, dadosCopia, numThreads); // executa o algoritmo
                     tempoTotal += resultado.tempo;
-                    todosCorretos = todosCorretos && resultado.correto;
+                    todosCorretos = todosCorretos && resultado.correto; // vai acumulando os true de todos
                 }
-                // calcular o tempo médio e verificar se todos os resultados estão corretos                
+                              
                 ResultadoBenchmark resultadoMedio;
                 std::ostringstream nomeCompleto;
                 nomeCompleto << algoritmo << " + " << estrategia << " (n=" << tamanho << ", " << numThreads << " threads)";
                 resultadoMedio.nome = nomeCompleto.str();
-                resultadoMedio.tempo = tempoTotal / repeticoes;
+                resultadoMedio.tempo = tempoTotal / repeticoes; // média dos tempos das repetições
                 resultadoMedio.correto = todosCorretos;
                 
-                resultados.push_back(resultadoMedio);
+                resultados.push_back(resultadoMedio); // adiciona o resultado desse algoritmo + estratégia a resultados
             }
         }
     }
