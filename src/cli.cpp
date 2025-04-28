@@ -14,7 +14,7 @@
 
 namespace cli {
 
-void imprimirAjuda() {
+void imprimirAjuda() { // a parte do help (-h)
     std::cout << "Uso: ordenacao_paralela [OPCOES]\n\n";
     std::cout << "Aplicação de ordenação paralela em C++.\n\n";
     std::cout << "Opções:\n";
@@ -152,7 +152,7 @@ std::vector<int> dividirStringInteiros(const std::string& s, char delim) {
 Opcoes parseArgumentos(int argc, char* argv[]) {
     Opcoes opcoes;
     
-    // valores padrão
+    // valores padrão para as opcoes
     opcoes.modo = "ordenar";
     opcoes.algoritmo = "quick";
     opcoes.estrategia = "dividir-trabalho";
@@ -199,9 +199,9 @@ Opcoes parseArgumentos(int argc, char* argv[]) {
         } else if (arg == "--comparar-estrategias") {
             if (i + 1 < argc) opcoes.estrategiasComparar = dividirString(argv[++i], ',');
         } else if (arg == "--tamanhos") {
-            if (i + 1 < argc) opcoes.tamanhos = dividirStringInteiros(argv[++i], ',');
+            if (i + 1 < argc) opcoes.tamanhos = dividirStringInteiros(argv[++i], ','); // varios int, divide
         } else if (arg == "--repeticoes") {
-            if (i + 1 < argc) opcoes.repeticoes = std::stoi(argv[++i]);
+            if (i + 1 < argc) opcoes.repeticoes = std::stoi(argv[++i]); // numero de repeticoes
         }
     }
     
@@ -242,7 +242,7 @@ void executarOrdenacaoSimples(const Opcoes& opcoes) {
     // carregar dados
     std::vector<int> dados;
     
-    if (!opcoes.arquivoEntrada.empty()) {
+    if (!opcoes.arquivoEntrada.empty()) { // se usuario não passa arquivo de entrada ele gera dados aleatorios
         try {
             dados = gerador::lerArquivo(opcoes.arquivoEntrada);
             std::cout << "Dados carregados do arquivo: " << opcoes.arquivoEntrada << "\n";
@@ -258,7 +258,7 @@ void executarOrdenacaoSimples(const Opcoes& opcoes) {
     }
     
     // mostrar dados antes da ordenação (limitado)
-    if (opcoes.visualizar) {
+    if (opcoes.visualizar) { // se o usuario escolher visualizar como ele vai ordenando
         std::cout << "Dados originais:\n";
         visualizarArray(dados);
     }
@@ -294,13 +294,13 @@ void executarOrdenacaoSimples(const Opcoes& opcoes) {
     }
     
     // verificar se está ordenado
-    bool ordenado = benchmark::verificarOrdenacao(dados);
+    bool ordenado = benchmark::verificarOrdenacao(dados); // para ordenacao correta
     
     std::cout << "Tempo de execução: " << duracao.count() << " ms\n";
     std::cout << "Ordenação correta: " << (ordenado ? "Sim" : "Não") << "\n";
     
-    // Salvar resultado
-    if (!opcoes.arquivoSaida.empty()) {
+    // salvar resultado
+    if (!opcoes.arquivoSaida.empty()) { // se usuario não passa arquivo de saida ele não guarda em nenhum lugar, só ordena
         bool salvo = gerador::salvarArquivo(dados, opcoes.arquivoSaida);
         if (salvo) {
             std::cout << "Dados salvos em: " << opcoes.arquivoSaida << "\n";
@@ -310,18 +310,18 @@ void executarOrdenacaoSimples(const Opcoes& opcoes) {
     }
 }
 
-// Executar geração de dados
+// executar geração de dados
 void executarGeracaoDados(const Opcoes& opcoes) {
     if (opcoes.arquivoSaida.empty()) {
         std::cerr << "Erro: É necessário especificar um arquivo de saída para geração de dados.\n";
         return;
     }
     
-    auto tipo = gerador::obterTipoPorNome(opcoes.tipoDados);
-    auto dados = gerador::gerarDados(opcoes.tamanho, tipo);
+    auto tipo = gerador::obterTipoPorNome(opcoes.tipoDados); // pega o tipo pelo nome do tipo
+    auto dados = gerador::gerarDados(opcoes.tamanho, tipo); // pega o gerar dados la do gerador e passa o tamanho e o tipo
     
-    bool salvo = gerador::salvarArquivo(dados, opcoes.arquivoSaida);
-    if (salvo) {
+    bool salvo = gerador::salvarArquivo(dados, opcoes.arquivoSaida); // salva o resultado no arquivo de saída
+    if (salvo) { // mostra que salvou
         std::cout << "Dados gerados salvos em: " << opcoes.arquivoSaida << "\n";
         std::cout << "Tamanho: " << opcoes.tamanho << " elementos\n";
         std::cout << "Tipo: " << opcoes.tipoDados << "\n";
