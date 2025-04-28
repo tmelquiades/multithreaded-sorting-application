@@ -22,12 +22,12 @@ void dividirTrabalho(std::vector<int>& arr, ordenacao::AlgoritmoOrdenacao algori
     
     // Função para ordenar um segmento do array
     auto ordenarSegmento = [&](int inicio, int fim) {
-        std::vector<int> segmento(arr.begin() + inicio, arr.begin() + fim);
-        algoritmo(segmento);
+        std::vector<int> segmento(arr.begin() + inicio, arr.begin() + fim); // criamos um array novo
+        algoritmo(segmento); // ordenamos o array novo
         
         // Copiar segmento ordenado de volta para o array original
-        std::lock_guard<std::mutex> lock(mtx);
-        std::copy(segmento.begin(), segmento.end(), arr.begin() + inicio);
+        std::lock_guard<std::mutex> lock(mtx); // usamos mutex porque estamos escrevendo no array inicial/final
+        std::copy(segmento.begin(), segmento.end(), arr.begin() + inicio); // escreve de novo no array original
     };
     
     // Criar e iniciar threads
@@ -36,6 +36,7 @@ void dividirTrabalho(std::vector<int>& arr, ordenacao::AlgoritmoOrdenacao algori
         int fim = (i + 1) * segmentoTamanho;
         threads.emplace_back(ordenarSegmento, inicio, fim); // cria uma nova thread dentro do vetor threads 
                                                              // e a inicializa com a função lambda - ordenar segmento e seus parâmetros
+                                                             // inicio e fim são argumentos para ordenar segmento pq precisa saber o inicio e fim dele no array
     }
     
     // Último segmento (pode ser maior devido a divisão não exata)
@@ -57,7 +58,7 @@ void dividirTrabalho(std::vector<int>& arr, ordenacao::AlgoritmoOrdenacao algori
             int fim = std::min((i + 2 * passo) * segmentoTamanho, tamanho);
             
             if (meio < fim) {
-                std::inplace_merge(resultado.begin() + inicio, resultado.begin() + meio, resultado.begin() + fim); // 
+                std::inplace_merge(resultado.begin() + inicio, resultado.begin() + meio, resultado.begin() + fim); // merge é inplace
             }
         }
     }
