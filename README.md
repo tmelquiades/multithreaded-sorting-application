@@ -78,12 +78,11 @@ docker run -p 8080:8080 ordenacao-paralela
 ### Usando Imagem Docker - Docker HUB:
 
 É requisito ter o docker instalado.
-Para dar um pull na imagem:
+Para dar um pull na imagem e executar dentro de um shell:
 ```bash
 docker pull giselesilva/ordenacao-paralela:latest
-docker run -d --name ordenacao-paralela -p 8080:8080 giselesilva/ordenacao-paralela:latest
+docker run -it giselesilva/ordenacao-paralela:latest /bin/sh
 ```
-
 
 ## Como Usar
 
