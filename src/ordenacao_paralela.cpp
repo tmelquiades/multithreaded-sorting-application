@@ -132,7 +132,7 @@ void mergeSortParalelo(std::vector<int>& arr, int inicio, int fim, int profundid
     if (inicio < fim) {
         int meio = inicio + (fim - inicio) / 2;
         
-        // Se a profundidade atual for menor que a profundidade máxima, cria uma thread
+        // se a profundidade atual for menor que a profundidade máxima, cria uma thread
         if (profundidade < maxProfundidade) {
             auto futureLeft = std::async(
                 std::launch::async,
@@ -143,16 +143,16 @@ void mergeSortParalelo(std::vector<int>& arr, int inicio, int fim, int profundid
             
             futureLeft.wait();
         } else {
-            // Se a profundidade máxima for atingida, ordena sequencialmente
+            // se a profundidade máxima for atingida, ordena sequencialmente
             mergeSortParalelo(arr, inicio, meio, profundidade + 1, maxProfundidade);
             mergeSortParalelo(arr, meio + 1, fim, profundidade + 1, maxProfundidade);
         }
         
-        // Mescla os dois subarrays
+        // mescla os dois subarrays
         mergeParalelo(arr, inicio, meio, fim);
     }
 }
-// Função de interface para MergeSort paralelo
+// função de interface para MergeSort paralelo
 void paralelizarMergeSort(std::vector<int>& arr, int numThreads) {
     int maxProfundidade = static_cast<int>(std::log2(numThreads));
     mergeSortParalelo(arr, 0, arr.size() - 1, 0, maxProfundidade);
@@ -162,30 +162,36 @@ void chamarMergeSortParalelo(std::vector<int>& arr, ordenacao::AlgoritmoOrdenaca
     paralelizarMergeSort(arr, numThreads);
 }
 
-// Funcao de interface para QuickSort paralelo
+// função de interface para QuickSort paralelo
 void paralelizarQuickSort(std::vector<int>& arr, int numThreads) {
     int maxProfundidade = static_cast<int>(std::log2(numThreads));
     quickSortParalelo(arr, 0, arr.size() - 1, 0, maxProfundidade);
 }
 
-// Função de interface para chamar o QuickSort paralelo
+// função de interface para chamar o QuickSort paralelo
 void chamarQuickSortParalelo(std::vector<int>& arr, ordenacao::AlgoritmoOrdenacao, int numThreads) {
     paralelizarQuickSort(arr, numThreads);
 }
 
 
-// Obter nomes de todas as estratégias disponíveis
+// obter nomes de todas as estratégias disponíveis
 std::vector<std::string> obterNomesEstrategias() {
     return {
-        "dividir-trabalho",
-
+        "dividir-trabalho", "merge-paralelo", "quick-paralelo"
     };
 }
 
-// Mapear nome da estratégia para função
+// Verificar se é uma estratégia específica (não precisa de algoritmo separado)
+bool ehEstrategiaEspecifica(const std::string& nome) {
+    return nome == "merge-paralelo" || nome == "quick-paralelo";
+}
+
+// mapear nome da estratégia para função
 EstrategiaParalela obterEstrategia(const std::string& nome) {
     static const std::unordered_map<std::string, EstrategiaParalela> estrategias = {
-        {"dividir-trabalho", dividirTrabalho}
+        {"dividir-trabalho", dividirTrabalho},
+        {"merge-paralelo", chamarMergeSortParalelo},
+        {"quick-paralelo", chamarQuickSortParalelo}
     };
     
     auto it = estrategias.find(nome);
@@ -193,8 +199,24 @@ EstrategiaParalela obterEstrategia(const std::string& nome) {
         return it->second;
     }
     
-    // Estratégia padrão se não encontrada
+    // estratégia padrão se não encontrada
     return dividirTrabalho;
+}
+
+// mapear nome para estratégias específicas
+EstrategiaParalelaEspecifica obterEstrategiaEspecifica(const std::string& nome) {
+    static const std::unordered_map<std::string, EstrategiaParalelaEspecifica> estrategias = {
+        {"merge-paralelo", paralelizarMergeSort},
+        {"quick-paralelo", paralelizarQuickSort}
+    };
+    
+    auto it = estrategias.find(nome);
+    if (it != estrategias.end()) {
+        return it->second;
+    }
+    
+    // Função vazia como fallback
+    return [](std::vector<int>&, int) {};
 }
 
 } // namespace ordenacao_paralela

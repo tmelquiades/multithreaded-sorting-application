@@ -21,6 +21,8 @@ typedef std::function<void(std::vector<int>&, int)> EstrategiaParalelaEspecifica
 // Interface unificada
 std::vector<std::string> obterNomesEstrategias();
 EstrategiaParalela obterEstrategia(const std::string& nome);
+EstrategiaParalelaEspecifica obterEstrategiaEspecifica(const std::string& nome);
+bool ehEstrategiaEspecifica(const std::string& nome);
 
 } // namespace ordenacao_paralela
 
