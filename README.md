@@ -72,7 +72,7 @@ Para compilar e executar usando Docker:
 
 ```bash
 docker build -t ordenacao-paralela .
-docker run -p 8080:8080 ordenacao-paralela
+docker run ordenacao-paralela
 ```
 
 ### Usando Imagem Docker - Docker HUB:
